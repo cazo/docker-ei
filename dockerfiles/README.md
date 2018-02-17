@@ -16,7 +16,7 @@ provided by WSO2 Enterprise Integrator 6.1.1, namely : <br>
 git clone https://github.com/wso2/docker-ei.git
 ```
 
->The local copy of the `dockerfiles` directory will be referred to as `DOCKERFILE_HOME` from this point onwards.
+>The local copy of the `dockerfiles` directory will be referred to as `$DOCKERFILE_HOME` from this point onwards.
 
 ##### 2. Add JDK and WSO2 Enterprise Integrator distributions to `$DOCKERFILE_HOME/base/files`
 - Download [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and
@@ -40,7 +40,7 @@ in order to obtain latest bug fixes and updates for the product.
 - For integrator, navigate to `$DOCKERFILE_HOME/integrator` directory. <br>
   Execute `docker build` command as shown below. 
     + `docker build -t wso2ei-integrator:6.1.1 .`
-- For analytics, navigate to `<DOCKERFILE_HOME>/analytics` directory. <br>
+- For analytics, navigate to `$DOCKERFILE_HOME/analytics` directory. <br>
   Execute `docker build` command as shown below. 
     + `docker build -t wso2ei-analytics:6.1.1 .`
     
