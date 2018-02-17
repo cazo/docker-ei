@@ -5,6 +5,7 @@ provided by WSO2 Enterprise Integrator 6.1.1, namely : <br>
 2. Analytics
 
 ## Prerequisites
+* Git installed
 * [Docker](https://www.docker.com/get-docker) v17.09.0 or above
 
 ## How to build an image and run
