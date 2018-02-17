@@ -2,10 +2,7 @@
 This section defines dockerfiles and step-by-step instructions to build docker images for multiple profiles <br>
 provided by WSO2 Enterprise Integrator 6.1.1, namely : <br>
 1. Integrator
-2. Business Process
-3. Broker
-4. MSF4J
-5. Analytics
+2. Analytics
 
 ## Prerequisites
 * [Docker](https://www.docker.com/get-docker) v17.09.0 or above
