@@ -2,17 +2,19 @@
 
 This section describes how to set up a WSO2 ESB worker/manager separated cluster and how to configure this cluster with different third-party load balancers. The following sections give you information and instructions on how to set up your cluster.
 
-Worker/manager separated clustering deployment pattern
-Configuring the load balancer
-Setting up the databases
-Configuring the manager node
-Configuring the worker node
-Testing the cluster
+## Worker/manager separated clustering deployment pattern
+## Configuring the load balancer
+## Setting up the databases
+## Configuring the manager node
+## Configuring the worker node
+## Testing the cluster
+
 Important: When configuring your WSO2 products for clustering, it is necessary to use a specific IP address and not localhost or host names in your configurations. So, keep this in mind when hosting WSO2 products in your production environment.
 
-See Setting up a Cluster in AWS Mode for information on clustering WSO2 products that are deployed on Amazon EC2 instances. The instructions in that topic only include the configurations done to the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file, so the configuration changes done to other configuration files must be done in addition to the steps in that topic.
+See Setting up a Cluster in AWS Mode for information on clustering WSO2 products that are deployed on Amazon EC2 instances. The instructions in that topic only include the configurations done to the $PRODUCT_HOME/repository/conf/axis2/axis2.xml file, so the configuration changes done to other configuration files must be done in addition to the steps in that topic.
 
-Worker/manager separated clustering deployment pattern
+### Worker/manager separated clustering deployment pattern
+
 In this pattern there are three WSO2 ESB nodes; 1 node acts as the manager node and 2 nodes act as worker nodes for high availability and serving service requests. In this pattern, we allow access to the admin console through an external load balancer. Additionally, service requests are directed to worker nodes through this load balancer. The following image depicts the sample pattern this clustering deployment scenario will follow.
 
 
