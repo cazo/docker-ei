@@ -181,11 +181,11 @@ See Setting up the Database for information on how to set up the databases for a
 ```xml
 <parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
 ```
-  - Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/repository/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
+  - Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
 ```xml
 <parameter name="localMemberPort">4100</parameter>
 ```
-Specify the well-known members. In this example, the well-known member is a worker node. The port value for the WKA worker node must be the same value as it's localMemberPort (in this case 4200).
+  - Specify the well-known members. In this example, the well-known member is a worker node. The port value for the WKA worker node must be the same value as it's localMemberPort (in this case 4200).
 ```xml
 <members>
     <member>
@@ -195,21 +195,24 @@ Specify the well-known members. In this example, the well-known member is a work
 </members>
 ```
 
-Although this example only indicates one well-known member, it is recommended to add at least two well-known members here. This is done to ensure that there is high availability for the cluster.
+> Although this example only indicates one well-known member, it is recommended to add at least two well-known members here. This is done to ensure that there is high availability for the cluster.
 
-You can also use IP address ranges for the hostName. For example, 192.168.1.2-10. This should ensure that the cluster eventually recovers after failures. One shortcoming of doing this is that you can define a range only for the last portion of the IP address. You should also keep in mind that the smaller the range, the faster the time it takes to discover members since each node has to scan a lesser number of potential members.
+> You can also use IP address ranges for the hostName. For example, 192.168.1.2-10. This should ensure that the cluster eventually recovers after failures. One shortcoming of doing this is that you can define a range only for the last portion of the IP address. You should also keep in mind that the smaller the range, the faster the time it takes to discover members since each node has to scan a lesser number of potential members.
 
-Change the following clustering properties. Ensure that you set the value of the subDomain as mgt to specify that this is the manager node. This ensures that traffic for the manager node is routed to this member.
-
+  - Change the following clustering properties. Ensure that you set the value of the subDomain as mgt to specify that this is the manager node. This ensures that traffic for the manager node is routed to this member.
+```xml
 <parameter name="properties">
             <property name="backendServerURL" value="https://${hostName}:${httpsPort}/services/"/>
             <property name="mgtConsoleURL" value="https://${hostName}:${httpsPort}/"/>
             <property name="subDomain" value="mgt"/>
 </parameter>
-Configure the HostName. To do this, edit the <PRODUCT_HOME>/repository/conf/carbon.xml file as follows.
+```
+
+* Configure the `HostName`. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows.
 
 <HostName>esb.wso2.com</HostName>
 <MgtHostName>mgt.esb.wso2.com</MgtHostName>
+
 Enable SVN-based deployment synchronization with the AutoCommit property marked as true. To do this, edit the <PRODUCT_HOME>/repository/conf/carbon.xml file as follows. See Configuring Deployment Synchronizer for more information on this.
 
 <DeploymentSynchronizer>
