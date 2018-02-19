@@ -1,53 +1,53 @@
-# Clustering EI 6.1.1
+# Clustering WSO2 EI 6.1.1
 
 This section describes how to set up a WSO2 ESB worker/manager separated cluster and how to configure this cluster with different third-party load balancers. The following sections give you information and instructions on how to set up your cluster.
 
-## Worker/manager separated clustering deployment pattern
-## Configuring the load balancer
-## Setting up the databases
-## Configuring the manager node
-## Configuring the worker node
-## Testing the cluster
+* Worker/manager separated clustering deployment pattern
+* Configuring the load balancer
+* Setting up the databases
+* Configuring the manager node
+* Configuring the worker node
+* Testing the cluster
 
-Important: When configuring your WSO2 products for clustering, it is necessary to use a specific IP address and not localhost or host names in your configurations. So, keep this in mind when hosting WSO2 products in your production environment.
+`Important: When configuring your WSO2 products for clustering, it is necessary to use a specific IP address and not localhost or host names in your configurations. So, keep this in mind when hosting WSO2 products in your production environment.
 
-See Setting up a Cluster in AWS Mode for information on clustering WSO2 products that are deployed on Amazon EC2 instances. The instructions in that topic only include the configurations done to the $PRODUCT_HOME/repository/conf/axis2/axis2.xml file, so the configuration changes done to other configuration files must be done in addition to the steps in that topic.
+See Setting up a Cluster in AWS Mode for information on clustering WSO2 products that are deployed on Amazon EC2 instances. The instructions in that topic only include the configurations done to the $PRODUCT_HOME/conf/axis2/axis2.xml file, so the configuration changes done to other configuration files must be done in addition to the steps in that topic.`
 
 ### Worker/manager separated clustering deployment pattern
 
 In this pattern there are three WSO2 ESB nodes; 1 node acts as the manager node and 2 nodes act as worker nodes for high availability and serving service requests. In this pattern, we allow access to the admin console through an external load balancer. Additionally, service requests are directed to worker nodes through this load balancer. The following image depicts the sample pattern this clustering deployment scenario will follow.
-
-
+![Alt text](http://ziben.com.br/coisitas/images/ClusterESB.png)
 
 Here, we use two nodes as well-known members, one is the manager node and the other is one of the worker nodes. It is always recommended to use at least two well-known members to prevent restarting all the nodes in the cluster in case a well known member is shut down.
 
 See Worker/Manager separated clustering patterns for a wider variety of options if you prefer to use a different clustering deployment pattern.
 
-Configuring the load balancer
+### Configuring the load balancer
+
 The load balancer automatically distributes incoming traffic across multiple WSO2 product instances. It enables you to achieve greater levels of fault tolerance in your cluster, and provides the required balancing of load needed to distribute traffic.
 
-About clustering without a load balancer
+`About clustering without a load balancer
+The configurations in this subsection are not required if your clustering setup does not have a load balancer. If you follow the rest of the configurations in this topic while excluding this section, you will be able to set up your cluster without the load balancer.`
 
-The configurations in this subsection are not required if your clustering setup does not have a load balancer. If you follow the rest of the configurations in this topic while excluding this section, you will be able to set up your cluster without the load balancer.
-
-Things to keep in mind
+### Things to keep in mind
 
 The configuration steps in this document are written assuming that default 80 and 443 ports are used and exposed by the 3rd party load balancer for this ESB cluster. If any other ports are used instead of the default ones, please replace 80 and 443 values with the corresponding ports in the relevant places.
 
-So with the above in mind, please note the following:
+### So with the above in mind, please note the following:
 
-Load balancer ports are HTTP 80 and HTTPS 443 as indicated in the deployment pattern above.
-Direct the HTTP requests to the worker nodes using http://xxx.xxx.xxx.xx3/<service> via HTTP 80 port.
-Direct the HTTPS requests to the worker nodes using https://xxx.xxx.xxx.xx3/<service> via HTTPS 443 port.
-Access the management console as https://xxx.xxx.xxx.xx2/carbon via HTTPS 443 port
-In a WSO2 ESB cluster, the worker nodes address service requests on the PassThrough Transport ports (8280 and 8243) and can access the Management Console using the HTTPS 9443 port.
+> Load balancer ports are HTTP 80 and HTTPS 443 as indicated in the deployment pattern above.
+> Direct the HTTP requests to the worker nodes using http://xxx.xxx.xxx.xx3/<service> via HTTP 80 port.
+> Direct the HTTPS requests to the worker nodes using https://xxx.xxx.xxx.xx3/<service> via HTTPS 443 port.
+> Access the management console as https://xxx.xxx.xxx.xx2/carbon via HTTPS 443 port
+> In a WSO2 ESB cluster, the worker nodes address service requests on the PassThrough Transport ports (8280 and 8243) and can access the Management Console using the HTTPS 9443 port.
+        
 Tip: We recommend that you use NGINX Plus as your load balancer of choice.
 
 Use the following steps to configure NGINX Plus version 1.7.11 as the load balancer for WSO2 products.
 
 Install NGINX Plus in a server configured in your cluster.
 Configure NGINX Plus to direct the HTTP requests to the two worker nodes via the HTTP 80 port using the http://esb.wso2.com/<service>. To do this, create a VHost file (esb.http.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
-
+``` json
 upstream wso2.esb.com {
         server xxx.xxx.xxx.xx3:8280;
         server xxx.xxx.xxx.xx4:8280;
@@ -66,6 +66,8 @@ server {
                proxy_pass http://wso2.esb.com;
         }
 }
+```
+
 Configure NGINX Plus to direct the HTTPS requests to the two worker nodes via the HTTPS 443 port using https://esb.wso2.com/<service>. To do this, create a VHost file (esb.https.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
 
 upstream ssl.wso2.esb.com {
