@@ -165,30 +165,36 @@ See Setting up the Database for information on how to set up the databases for a
 * [Download](http://ziben.com.br/coisitas/wso2ei-6.1.1.zip)  and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
 
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file as follows.
-> Enable clustering for this node: 
-<clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
-
-> Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
+  - Enable clustering for this node:
+```xml
+  <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
+```
+  - Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
+```xml
 <parameter name="membershipScheme">wka</parameter>
-
-> Specify the name of the cluster this node will join.
+```
+  - Specify the name of the cluster this node will join.
+```xml
 <parameter name="domain">wso2.esb.domain</parameter>
-
-> Specify the host used to communicate cluster messages.
+```
+  - Specify the host used to communicate cluster messages.
 ```xml
 <parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
 ```
-Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/repository/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
+  - Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/repository/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
+```xml
 <parameter name="localMemberPort">4100</parameter>
-
+```
 Specify the well-known members. In this example, the well-known member is a worker node. The port value for the WKA worker node must be the same value as it's localMemberPort (in this case 4200).
-
+```xml
 <members>
     <member>
         <hostName>xxx.xxx.xxx.xx3</hostName>
         <port>4200</port>
     </member>
 </members>
+```
+
 Although this example only indicates one well-known member, it is recommended to add at least two well-known members here. This is done to ensure that there is high availability for the cluster.
 
 You can also use IP address ranges for the hostName. For example, 192.168.1.2-10. This should ensure that the cluster eventually recovers after failures. One shortcoming of doing this is that you can define a range only for the last portion of the IP address. You should also keep in mind that the smaller the range, the faster the time it takes to discover members since each node has to scan a lesser number of potential members.
