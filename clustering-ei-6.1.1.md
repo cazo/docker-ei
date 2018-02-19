@@ -51,6 +51,7 @@ The configuration steps in this document are written assuming that default 80 an
 * Install NGINX Plus in a server configured in your cluster.
 * Configure NGINX Plus to direct the HTTP requests to the two worker nodes via the HTTP 80 port using the http://esb.wso2.com/<service>. To do this, create a VHost file (esb.http.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
 
+```
 upstream wso2.esb.com {
         server xxx.xxx.xxx.xx3:8280;
         server xxx.xxx.xxx.xx4:8280;
@@ -69,9 +70,10 @@ server {
                proxy_pass http://wso2.esb.com;
         }
 }
+```
 
 Configure NGINX Plus to direct the HTTPS requests to the two worker nodes via the HTTPS 443 port using https://esb.wso2.com/<service>. To do this, create a VHost file (esb.https.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
-
+```
 upstream ssl.wso2.esb.com {
     server xxx.xxx.xxx.xx3:8243;
     server xxx.xxx.xxx.xx4:8243;
@@ -97,6 +99,7 @@ listen 443;
         proxy_pass https://ssl.wso2.esb.com;
         }
 }
+```
 
 Configure NGINX Plus to access the Management Console as https://mgt.esb.wso2.com/carbon via HTTPS 443 port. This is to direct requests to the manager node. To do this, create a VHost file (mgt.esb.https.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
 
