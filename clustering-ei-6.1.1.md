@@ -9,9 +9,12 @@ This section describes how to set up a WSO2 ESB worker/manager separated cluster
 * Configuring the worker node
 * Testing the cluster
 
-`Important: When configuring your WSO2 products for clustering, it is necessary to use a specific IP address and not localhost or host names in your configurations. So, keep this in mind when hosting WSO2 products in your production environment.
+> Important: When configuring your WSO2 products for clustering, it is necessary to use a specific IP address and not localhost or 
+> host names in your configurations. So, keep this in mind when hosting WSO2 products in your production environment.
 
-See Setting up a Cluster in AWS Mode for information on clustering WSO2 products that are deployed on Amazon EC2 instances. The instructions in that topic only include the configurations done to the $PRODUCT_HOME/conf/axis2/axis2.xml file, so the configuration changes done to other configuration files must be done in addition to the steps in that topic.`
+> See Setting up a Cluster in AWS Mode for information on clustering WSO2 products that are deployed on Amazon EC2 instances. The
+> instructions in that topic only include the configurations done to the $PRODUCT_HOME/conf/axis2/axis2.xml file, so the configuration
+> changes done to other configuration files must be done in addition to the steps in that topic.
 
 ### Worker/manager separated clustering deployment pattern
 
@@ -26,8 +29,8 @@ See Worker/Manager separated clustering patterns for a wider variety of options 
 
 The load balancer automatically distributes incoming traffic across multiple WSO2 product instances. It enables you to achieve greater levels of fault tolerance in your cluster, and provides the required balancing of load needed to distribute traffic.
 
-`About clustering without a load balancer
-The configurations in this subsection are not required if your clustering setup does not have a load balancer. If you follow the rest of the configurations in this topic while excluding this section, you will be able to set up your cluster without the load balancer.`
+> About clustering without a load balancer
+> The configurations in this subsection are not required if your clustering setup does not have a load balancer. If you follow the rest of > the configurations in this topic while excluding this section, you will be able to set up your cluster without the load balancer.`
 
 ### Things to keep in mind
 
@@ -41,13 +44,13 @@ The configuration steps in this document are written assuming that default 80 an
 > Access the management console as https://xxx.xxx.xxx.xx2/carbon via HTTPS 443 port
 > In a WSO2 ESB cluster, the worker nodes address service requests on the PassThrough Transport ports (8280 and 8243) and can access the Management Console using the HTTPS 9443 port.
         
-Tip: We recommend that you use NGINX Plus as your load balancer of choice.
+> Tip: We recommend that you use NGINX Plus as your load balancer of choice.
 
-Use the following steps to configure NGINX Plus version 1.7.11 as the load balancer for WSO2 products.
+### Use the following steps to configure NGINX as the load balancer for WSO2 products.
 
-Install NGINX Plus in a server configured in your cluster.
-Configure NGINX Plus to direct the HTTP requests to the two worker nodes via the HTTP 80 port using the http://esb.wso2.com/<service>. To do this, create a VHost file (esb.http.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
-``` json
+* Install NGINX Plus in a server configured in your cluster.
+* Configure NGINX Plus to direct the HTTP requests to the two worker nodes via the HTTP 80 port using the http://esb.wso2.com/<service>. To do this, create a VHost file (esb.http.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
+
 upstream wso2.esb.com {
         server xxx.xxx.xxx.xx3:8280;
         server xxx.xxx.xxx.xx4:8280;
@@ -66,7 +69,6 @@ server {
                proxy_pass http://wso2.esb.com;
         }
 }
-```
 
 Configure NGINX Plus to direct the HTTPS requests to the two worker nodes via the HTTPS 443 port using https://esb.wso2.com/<service>. To do this, create a VHost file (esb.https.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
 
@@ -95,6 +97,7 @@ listen 443;
         proxy_pass https://ssl.wso2.esb.com;
         }
 }
+
 Configure NGINX Plus to access the Management Console as https://mgt.esb.wso2.com/carbon via HTTPS 443 port. This is to direct requests to the manager node. To do this, create a VHost file (mgt.esb.https.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
 
 server {
@@ -116,28 +119,40 @@ server {
     error_log  /var/log/nginx/mgt-error.log ;
            access_log  /var/log/nginx/mgt-access.log;
 }
+
 Restart the NGINX Plus server.
+
 $sudo service nginx restart
 
-Tip: You do not need to restart the server if you are simply making a modification to the VHost file. The following command should be sufficient in such cases.
+> Tip: You do not need to restart the server if you are simply making a modification to the VHost file. The following command should be sufficient in such cases.
 
 $sudo service nginx reload 
 
-Create SSL certificates
+### Create SSL certificates
+
 Create SSL certificates for both the manager and worker nodes using the instructions that follow.
 
 Create the Server Key.
+
 $sudo openssl genrsa -des3 -out server.key 1024
+
 Certificate Signing Request.
+
 $sudo openssl req -new -key server.key -out server.csr
+
 Remove the password.
+
 $sudo cp server.key server.key.org
 $sudo openssl rsa -in server.key.org -out server.key
+
 Sign your SSL Certificate.
+
 $sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
 While creating keys, enter the host name (esb.wso2.com or mgt.esb.wso2.com) as the common name.
 
-Setting up the databases
+### Setting up the databases
+
 See Setting up the Database for information on how to set up the databases for a cluster. The datasource configurations must be done in the <PRODUCT_HOME>/repository/conf/datasources/master-datasources.xml file for both the manager and worker nodes. You would also have to configure the shared registry database and mounting details in the <PRODUCT_HOME>/repository/conf/registry.xml file.
 
 Configuring the manager node
