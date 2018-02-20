@@ -165,27 +165,27 @@ See Setting up the Database for information on how to set up the databases for a
 * [Download](http://ziben.com.br/coisitas/wso2ei-6.1.1.zip)  and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
 
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file as follows.
-  - Enable clustering for this node:
+* Enable clustering for this node:
 ```xml
   <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
 ```
-  - Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
+* Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
 ```xml
 <parameter name="membershipScheme">wka</parameter>
 ```
-  - Specify the name of the cluster this node will join.
+* Specify the name of the cluster this node will join.
 ```xml
 <parameter name="domain">wso2.esb.domain</parameter>
 ```
-  - Specify the host used to communicate cluster messages.
+* Specify the host used to communicate cluster messages.
 ```xml
     <parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
 ```
-  - Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
+* Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
 ```xml
 <parameter name="localMemberPort">4100</parameter>
 ```
-  - Specify the well-known members. In this example, the well-known member is a worker node. The port value for the WKA worker node must be the same value as it's localMemberPort (in this case 4200).
+* Specify the well-known members. In this example, the well-known member is a worker node. The port value for the WKA worker node must be the same value as it's localMemberPort (in this case 4200).
 ```xml
 <members>
     <member>
@@ -199,7 +199,7 @@ See Setting up the Database for information on how to set up the databases for a
 
 > You can also use IP address ranges for the hostName. For example, 192.168.1.2-10. This should ensure that the cluster eventually recovers after failures. One shortcoming of doing this is that you can define a range only for the last portion of the IP address. You should also keep in mind that the smaller the range, the faster the time it takes to discover members since each node has to scan a lesser number of potential members.
 
-  - Change the following clustering properties. Ensure that you set the value of the subDomain as mgt to specify that this is the manager node. This ensures that traffic for the manager node is routed to this member.
+* Change the following clustering properties. Ensure that you set the value of the subDomain as mgt to specify that this is the manager node. This ensures that traffic for the manager node is routed to this member.
 ```xml
 <parameter name="properties">
             <property name="backendServerURL" value="https://${hostName}:${httpsPort}/services/"/>
@@ -213,8 +213,8 @@ See Setting up the Database for information on how to set up the databases for a
 <HostName>esb.wso2.com</HostName>
 <MgtHostName>mgt.esb.wso2.com</MgtHostName>
 
-Enable SVN-based deployment synchronization with the AutoCommit property marked as true. To do this, edit the <PRODUCT_HOME>/repository/conf/carbon.xml file as follows. See Configuring Deployment Synchronizer for more information on this.
-
+* Enable SVN-based deployment synchronization with the AutoCommit property marked as true. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows. See Configuring Deployment Synchronizer for more information on this.
+```
 <DeploymentSynchronizer>
     <Enabled>true</Enabled>
     <AutoCommit>true</AutoCommit>
@@ -225,19 +225,15 @@ Enable SVN-based deployment synchronization with the AutoCommit property marked 
     <SvnPassword>xxxxxx</SvnPassword>
     <SvnUrlAppendTenantId>true</SvnUrlAppendTenantId>
 </DeploymentSynchronizer>
-In the <PRODUCT_HOME>/repository/conf/carbon.xml file, you can also specify the port offset value. This is ONLY applicable if you have multiple WSO2 products hosted on the same server.
+```
 
- Click here for more information on configuring the port offset.
-<Ports>
-    ...
-    <Offset>0</Offset>
-    ...
-</Ports>
-Map the host names to the IP. Add the below host entries to your DNS, or “/etc/hosts” file (in Linux) in all the nodes of the cluster. You can map the IP address of the database server. In this example, MySQL is used as the database server, so <MYSQL-DB-SERVER-IP> is the actual IP address of the database server.
+* Map the host names to the IP. Add the below host entries to your DNS, or “/etc/hosts” file (in Linux) in all the nodes of the cluster. You can map the IP address of the database server. In this example, MySQL is used as the database server, so <MYSQL-DB-SERVER-IP> is the actual IP address of the database server.
+
 ```
 <IP-of-MYSQL-DB-SERVER>  carbondb.mysql-wso2.com
 ```
-Allow access the management console only through the load balancer. Configure the HTTP/HTTPS proxy ports to communicate through the load balancer by editing the <PRODUCT_HOME>/repository/conf/tomcat/catalina-server.xml file as follows.
+
+* Allow access the management console only through the load balancer. Configure the HTTP/HTTPS proxy ports to communicate through the load balancer by editing the <PRODUCT_HOME>/repository/conf/tomcat/catalina-server.xml file as follows.
 ```xml
 <Connector protocol="org.apache.coyote.http11.Http11NioProtocol"
     port="9763"
@@ -259,18 +255,16 @@ Allow access the management console only through the load balancer. Configure th
 ```
 <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
 ```
-  - Set the membership scheme to wka to enable the well-known address registration method (this node will send cluster initiation messages to WKA members that we will define later).
+* Set the membership scheme to wka to enable the well-known address registration method (this node will send cluster initiation messages to WKA members that we will define later).
 ```
 <parameter name="membershipScheme">wka</parameter>
 ```
-  - Specify the name of the cluster this node will join.
+* Specify the name of the cluster this node will join.
 ```xml
 <parameter name="domain">wso2.esb.domain</parameter>
 ```
-  - Specify the host used to communicate cluster messages.
+* Specify the host used to communicate cluster messages.
 
-    <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
-    
     <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
 
   - Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
