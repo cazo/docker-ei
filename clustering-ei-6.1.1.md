@@ -167,7 +167,7 @@ See Setting up the Database for information on how to set up the databases for a
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file as follows.
 * Enable clustering for this node:
 ```xml
-  <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
+<clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
 ```
 * Set the membership scheme to wka to enable the well-known address registration method (this node sends cluster initiation messages to the WKA members that we define later). 
 ```xml
@@ -202,9 +202,9 @@ See Setting up the Database for information on how to set up the databases for a
 * Change the following clustering properties. Ensure that you set the value of the subDomain as mgt to specify that this is the manager node. This ensures that traffic for the manager node is routed to this member.
 ```xml
 <parameter name="properties">
-            <property name="backendServerURL" value="https://${hostName}:${httpsPort}/services/"/>
-            <property name="mgtConsoleURL" value="https://${hostName}:${httpsPort}/"/>
-            <property name="subDomain" value="mgt"/>
+      <property name="backendServerURL" value="https://${hostName}:${httpsPort}/services/"/>
+      <property name="mgtConsoleURL" value="https://${hostName}:${httpsPort}/"/>
+      <property name="subDomain" value="mgt"/>
 </parameter>
 ```
 
@@ -252,7 +252,7 @@ See Setting up the Database for information on how to set up the databases for a
 
 * Download and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/conf/axis2/axis2.xml file as follows.
-  - Enable clustering for this node.
+* Enable clustering for this node.
 ```
 <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
 ```
@@ -269,37 +269,44 @@ See Setting up the Database for information on how to set up the databases for a
 <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
 ```
 * Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
-
+```xml
 <parameter name="localMemberPort">4200</parameter>
+```
 
-Define the sub-domain as worker by adding the following property under the  <parameter name="properties">  element: 
+* Define the sub-domain as worker by adding the following property under the  <parameter name="properties">  element: 
+```xml
 <property name="subDomain" value="worker"/>
+```
 
-Specify the well known member by providing the host name and localMemberPort values. Here, the well known member is the manager node. Defining the manager node is useful since it is required for the Deployment Synchronizer to function in an efficient manner. The deployment synchronizer uses this configuration to identify the manager and synchronize deployment artifacts across the nodes of a cluster.
-
+* Specify the well known member by providing the host name and localMemberPort values. Here, the well known member is the manager node. Defining the manager node is useful since it is required for the Deployment Synchronizer to function in an efficient manner. The deployment synchronizer uses this configuration to identify the manager and synchronize deployment artifacts across the nodes of a cluster.
+```xml
 <members>
     <member>
         <hostName>xxx.xxx.xxx.xx2</hostName>
         <port>4100</port>
     </member>
 </members>
-Although this example only indicates one well-known member, it is recommended to add at least two well-known members here. This is done to ensure that there is high availability for the cluster.
+```
+> Although this example only indicates one well-known member, it is recommended to add at least two well-known members here. This is done to ensure that there is high availability for the cluster.
 
-You can also use IP address ranges for the hostName. For example, 192.168.1.2-10. This should ensure that the cluster eventually recovers after failures. One shortcoming of doing this is that you can define a range only for the last portion of the IP address. You should also keep in mind that the smaller the range, the faster the time it takes to discover members, since each node has to scan a lesser number of potential members.
+> You can also use IP address ranges for the hostName. For example, 192.168.1.2-10. This should ensure that the cluster eventually recovers after failures. One shortcoming of doing this is that you can define a range only for the last portion of the IP address. You should also keep in mind that the smaller the range, the faster the time it takes to discover members, since each node has to scan a lesser number of potential members.
 
-Uncomment and edit the WSDLEPRPrefix element under org.apache.synapse.transport.passthru.PassThroughHttpListener and
-org.apache.synapse.transport.passthru.PassThroughHttpSSLListener in the transportReceiver.
-
+* Uncomment and edit the WSDLEPRPrefix element under `org.apache.synapse.transport.passthru.PassThroughHttpListener` and
+`org.apache.synapse.transport.passthru.PassThroughHttpSSLListener` in the transportReceiver.
+```xml
 <parameter name="WSDLEPRPrefix" locked="false">http://esb.wso2.com:80</parameter>
  
 <parameter name="WSDLEPRPrefix" locked="false">https://esb.wso2.com:443</parameter>
-Configure the <PRODUCT_HOME>/repository/conf/carbon.xml file to match your clustering configurations with your product.
+```
 
-Configure the HostName. To do this, edit the <PRODUCT_HOME>/repository/conf/carbon.xml file as follows.
+* Configure the <PRODUCT_HOME>/conf/carbon.xml file to match your clustering configurations with your product.
 
+* Configure the `HostName`. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows.
+```xml
 <HostName>esb.wso2.com</HostName>
-Enable SVN-based deployment synchronization with the AutoCommit property marked as false. To do this, edit the <PRODUCT_HOME>/repository/conf/carbon.xml file as follows.
-
+```
+* Enable SVN-based deployment synchronization with the AutoCommit property marked as false. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows.
+```xml
 <DeploymentSynchronizer>
     <Enabled>true</Enabled>
     <AutoCommit>false</AutoCommit>
@@ -310,41 +317,50 @@ Enable SVN-based deployment synchronization with the AutoCommit property marked 
     <SvnPassword>xxxxxx</SvnPassword>
     <SvnUrlAppendTenantId>true</SvnUrlAppendTenantId>
 </DeploymentSynchronizer>
-In the <PRODUCT_HOME>/repository/conf/carbon.xml file, you can also specify the port offset value. This is ONLY applicable if you have multiple WSO2 products hosted on the same server.
+```
+* In the <PRODUCT_HOME>/conf/carbon.xml file, you can also specify the port offset value. This is ONLY applicable if you have multiple WSO2 products hosted on the same server.
 
  Click here for more information on configuring the port offset.
+ ```xml
 <Ports>
     ...
     <Offset>0</Offset>
     ...
 </Ports>
-Map the host names to the IP. Add the following host entries to your DNS, or “/etc/hosts” file (in Linux) in all the nodes of the cluster. You can map the IP address of the database server. In this example, MySQL is used as the database server, so <MYSQL-DB-SERVER-IP> is the actual IP address of the database server.
-
-<IP-of-MYSQL-DB-SERVER>   carbondb.mysql-wso2.com
-Create the second worker node by getting a copy of the WSO2 product you just configured as a worker node and change the following in the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file. This copy of the WSO2 product can be moved to a server of its own.
+```
+* Map the host names to the IP. Add the following host entries to your DNS, or “/etc/hosts” file (in Linux) in all the nodes of the cluster. You can map the IP address of the database server. In this example, MySQL is used as the database server, so <MYSQL-DB-SERVER-IP> is the actual IP address of the database server.
+```
+<IP-of-MYSQL-DB-SERVER>   carbondb.mysql-wso2.com
+```
+* Create the second worker node by getting a copy of the WSO2 product you just configured as a worker node and change the following in the <PRODUCT_HOME>/conf/axis2/axis2.xml file. This copy of the WSO2 product can be moved to a server of its own.
+```xml
 <parameter name="localMemberPort">4300</parameter>
+```
 
-Testing the cluster
-Restart the configured load balancer.
-Start the manager node. The additional -Dsetup argument creates the required tables in the database. 
+# Testing the cluster
+
+* Restart the configured load balancer.
+* Start the manager node. The additional `-Dsetup` argument creates the required tables in the database.
+```
 sh <PRODUCT_HOME>/bin/wso2server.sh -Dsetup
-Start the two worker nodes. The additional -DworkerNode=true argument indicates that this is a worker node. This parameter basically makes a server read-only. A node with this parameter will not be able to do any changes such as writing or making modifications to the deployment repository etc. This parameter also enables the worker profile, where the UI bundles will not be activated and only the back end bundles will be activated once the server starts up. When you configure the axis2.xml file, the cluster sub domain must indicate that this node belongs to the "worker" sub domain in the cluster.
+```
+* Start the two worker nodes. The additional -DworkerNode=true argument indicates that this is a worker node. This parameter basically makes a server read-only. A node with this parameter will not be able to do any changes such as writing or making modifications to the deployment repository etc. This parameter also enables the worker profile, where the UI bundles will not be activated and only the back end bundles will be activated once the server starts up. When you configure the axis2.xml file, the cluster sub domain must indicate that this node belongs to the "worker" sub domain in the cluster.
 
-Tip: It is recommendation is to delete the <PRODUCT_HOME>/repository/deployment/server directory and create an empty server directory in the worker node. This is done to avoid any SVN conflicts that may arise.
-
+> Tip: It is recommendation is to delete the <PRODUCT_HOME>/repository/deployment/server directory and create an empty server directory in the worker node. This is done to avoid any SVN conflicts that may arise.
+```
 sh <PRODUCT_HOME>/bin/wso2server.sh -DworkerNode=true
+```
+* Check for ‘member joined’ log messages in all consoles.
 
-Check for ‘member joined’ log messages in all consoles.
+> Additional information on logs and new nodes
 
-Additional information on logs and new nodes
+> When you terminate one node, all nodes identify that the node has left the cluster. The same applies when a new node joins the cluster. 
 
-When you terminate one node, all nodes identify that the node has left the cluster. The same applies when a new node joins the cluster. 
+> If you want to add another new worker node, you can simply copy worker1 without any changes if you are running it on a new server (such as xxx.xxx.xxx.184). If you intend to use the new node on a server where another WSO2 product is running, you can use a copy of worker1 and change the port offset accordingly in the carbon.xml file. You also have to change localMemberPort in axis2.xml if that product has clustering enabled. Be sure to map all host names to the relevant IP addresses when creating a new node. The log messages indicate if the new node joins the cluster.
 
-If you want to add another new worker node, you can simply copy worker1 without any changes if you are running it on a new server (such as xxx.xxx.xxx.184). If you intend to use the new node on a server where another WSO2 product is running, you can use a copy of worker1 and change the port offset accordingly in the carbon.xml file. You also have to change localMemberPort in axis2.xml if that product has clustering enabled. Be sure to map all host names to the relevant IP addresses when creating a new node. The log messages indicate if the new node joins the cluster.
-
-Access management console through the LB using the following URL: https://xxx.xxx.xxx.xx2:443/carbon
-Test load distribution via http://xxx.xxx.xxx.xx3:80/ or https://xxx.xxx.xxx.xx3:443/.
-Add a sample proxy service with the log mediator in the inSequence so that logs will be displayed in the worker terminals, and then observe the cluster messages sent from the manager node to the workers.
+* Access management console through the LB using the following URL: https://xxx.xxx.xxx.xx2:443/carbon
+* Test load distribution via http://xxx.xxx.xxx.xx3:80/ or https://xxx.xxx.xxx.xx3:443/.
+* Add a sample proxy service with the log mediator in the inSequence so that logs will be displayed in the worker terminals, and then observe the cluster messages sent from the manager node to the workers.
 
 The load balancer manages the active and passive states of the worker nodes, activating nodes as needed and leaving the rest in passive mode. To test this, send a request to the end point through the load balancer to verify that the proxy service is activated only on the active worker node(s) while the remaining worker nodes remain passive. For example, you would send the request to the following URL:
 
