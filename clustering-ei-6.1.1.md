@@ -179,7 +179,7 @@ See Setting up the Database for information on how to set up the databases for a
 ```
   - Specify the host used to communicate cluster messages.
 ```xml
-<parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
+    <parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
 ```
   - Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
 ```xml
@@ -255,25 +255,25 @@ Allow access the management console only through the load balancer. Configure th
 
 * Download and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/conf/axis2/axis2.xml file as follows.
-  - Enable clustering for this node.
-  
-  ```xml
-    <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
-  ```
+  - Enable clustering for this node.
+```
+<clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
+```
   - Set the membership scheme to wka to enable the well-known address registration method (this node will send cluster initiation messages to WKA members that we will define later).
-  ```xml
+```
 <parameter name="membershipScheme">wka</parameter>
 ```
   - Specify the name of the cluster this node will join.
-  ```xml
-    <parameter name="domain">wso2.esb.domain</parameter>
-    ```
+```xml
+<parameter name="domain">wso2.esb.domain</parameter>
+```
   - Specify the host used to communicate cluster messages.
 
     <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
     
     <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
-Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
+
+  - Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
 <parameter name="localMemberPort">4200</parameter>
 
 Define the sub-domain as worker by adding the following property under the  <parameter name="properties">  element: 
