@@ -234,9 +234,9 @@ In the <PRODUCT_HOME>/repository/conf/carbon.xml file, you can also specify the 
     ...
 </Ports>
 Map the host names to the IP. Add the below host entries to your DNS, or “/etc/hosts” file (in Linux) in all the nodes of the cluster. You can map the IP address of the database server. In this example, MySQL is used as the database server, so <MYSQL-DB-SERVER-IP> is the actual IP address of the database server.
-
+```
 <IP-of-MYSQL-DB-SERVER>  carbondb.mysql-wso2.com
-
+```
 Allow access the management console only through the load balancer. Configure the HTTP/HTTPS proxy ports to communicate through the load balancer by editing the <PRODUCT_HOME>/repository/conf/tomcat/catalina-server.xml file as follows.
 ```xml
 <Connector protocol="org.apache.coyote.http11.Http11NioProtocol"
@@ -256,16 +256,23 @@ Allow access the management console only through the load balancer. Configure th
 * Download and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/conf/axis2/axis2.xml file as follows.
   - Enable clustering for this node.
+  
   ```xml
     <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent" enable="true">
   ```
   - Set the membership scheme to wka to enable the well-known address registration method (this node will send cluster initiation messages to WKA members that we will define later).
-  
+  ```xml
 <parameter name="membershipScheme">wka</parameter>
-Specify the name of the cluster this node will join.
-<parameter name="domain">wso2.esb.domain</parameter>
-Specify the host used to communicate cluster messages.
-<parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
+```
+  - Specify the name of the cluster this node will join.
+  ```xml
+    <parameter name="domain">wso2.esb.domain</parameter>
+    ```
+  - Specify the host used to communicate cluster messages.
+
+    <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
+    
+    <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
 Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
 <parameter name="localMemberPort">4200</parameter>
 
