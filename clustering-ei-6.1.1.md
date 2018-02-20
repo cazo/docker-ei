@@ -209,12 +209,13 @@ See Setting up the Database for information on how to set up the databases for a
 ```
 
 * Configure the `HostName`. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows.
-
+```xml
 <HostName>esb.wso2.com</HostName>
 <MgtHostName>mgt.esb.wso2.com</MgtHostName>
+```
 
 * Enable SVN-based deployment synchronization with the AutoCommit property marked as true. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows. See Configuring Deployment Synchronizer for more information on this.
-```
+```xml
 <DeploymentSynchronizer>
     <Enabled>true</Enabled>
     <AutoCommit>true</AutoCommit>
@@ -264,10 +265,11 @@ See Setting up the Database for information on how to set up the databases for a
 <parameter name="domain">wso2.esb.domain</parameter>
 ```
 * Specify the host used to communicate cluster messages.
+```xml
+<parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
+```
+* Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
 
-    <parameter name="localMemberHost">xxx.xxx.xxx.xx3</parameter>
-
-  - Specify the port used to communicate cluster messages. If this node is on the same server as the manager node, or another worker node, set this to a unique value, such as 4000 and 4001 for worker nodes 1 and 2. This port number will not be affected by the port offset in carbon.xml. If this port number is already assigned to another server, the clustering framework will automatically increment this port number.
 <parameter name="localMemberPort">4200</parameter>
 
 Define the sub-domain as worker by adding the following property under the  <parameter name="properties">  element: 
