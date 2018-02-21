@@ -158,11 +158,11 @@ While creating keys, enter the host name (esb.wso2.com or mgt.esb.wso2.com) as t
 
 ### Setting up the databases
 
-See Setting up the Database for information on how to set up the databases for a cluster. The datasource configurations must be done in the <PRODUCT_HOME>/repository/conf/datasources/master-datasources.xml file for both the manager and worker nodes. You would also have to configure the shared registry database and mounting details in the <PRODUCT_HOME>/repository/conf/registry.xml file.
+See Setting up the Database for information on how to set up the databases for a cluster. The datasource configurations must be done in the $PRODUCT_HOME/conf/datasources/master-datasources.xml file for both the manager and worker nodes. You would also have to configure the shared registry database and mounting details in the $PRODUCT_HOME/conf/registry.xml file.
 
 ### Configuring the manager node
 
-* [Download](http://ziben.com.br/coisitas/wso2ei-6.1.1.zip)  and unzip the WSO2 ESB binary distribution. Consider the extracted directory as <PRODUCT_HOME>.
+* [Download](http://ziben.com.br/coisitas/wso2ei-6.1.1.zip)  and unzip the WSO2 ESB binary distribution. Consider the extracted directory as $PRODUCT_HOME.
 
 * Set up the cluster configurations. Edit the <PRODUCT_HOME>/repository/conf/axis2/axis2.xml file as follows.
 * Enable clustering for this node:
@@ -179,7 +179,7 @@ See Setting up the Database for information on how to set up the databases for a
 ```
 * Specify the host used to communicate cluster messages.
 ```xml
-    <parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
+<parameter name="localMemberHost">xxx.xxx.xxx.xx2</parameter>
 ```
 * Specify the port used to communicate cluster messages. This port number is not affected by the port offset value specified in the <PRODUCT_HOME>/conf/carbon.xml. If this port number is already assigned to another server, the clustering framework automatically increments this port number. However, if two servers are running on the same machine, you must ensure that a unique port is set for each server.
 ```xml
@@ -234,7 +234,7 @@ See Setting up the Database for information on how to set up the databases for a
 <IP-of-MYSQL-DB-SERVER>  carbondb.mysql-wso2.com
 ```
 
-* Allow access the management console only through the load balancer. Configure the HTTP/HTTPS proxy ports to communicate through the load balancer by editing the <PRODUCT_HOME>/repository/conf/tomcat/catalina-server.xml file as follows.
+* Allow access the management console only through the load balancer. Configure the HTTP/HTTPS proxy ports to communicate through the load balancer by editing the $PRODUCT_HOME/conf/tomcat/catalina-server.xml file as follows.
 ```xml
 <Connector protocol="org.apache.coyote.http11.Http11NioProtocol"
     port="9763"
@@ -295,17 +295,16 @@ See Setting up the Database for information on how to set up the databases for a
 `org.apache.synapse.transport.passthru.PassThroughHttpSSLListener` in the transportReceiver.
 ```xml
 <parameter name="WSDLEPRPrefix" locked="false">http://esb.wso2.com:80</parameter>
- 
 <parameter name="WSDLEPRPrefix" locked="false">https://esb.wso2.com:443</parameter>
 ```
 
-* Configure the <PRODUCT_HOME>/conf/carbon.xml file to match your clustering configurations with your product.
+* Configure the $PRODUCT_HOME/conf/carbon.xml file to match your clustering configurations with your product.
 
-* Configure the `HostName`. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows.
+* Configure the `HostName`. To do this, edit the $PRODUCT_HOME/conf/carbon.xml file as follows.
 ```xml
 <HostName>esb.wso2.com</HostName>
 ```
-* Enable SVN-based deployment synchronization with the AutoCommit property marked as false. To do this, edit the <PRODUCT_HOME>/conf/carbon.xml file as follows.
+* Enable SVN-based deployment synchronization with the AutoCommit property marked as false. To do this, edit the $PRODUCT_HOME/conf/carbon.xml file as follows.
 ```xml
 <DeploymentSynchronizer>
     <Enabled>true</Enabled>
@@ -318,7 +317,7 @@ See Setting up the Database for information on how to set up the databases for a
     <SvnUrlAppendTenantId>true</SvnUrlAppendTenantId>
 </DeploymentSynchronizer>
 ```
-* In the <PRODUCT_HOME>/conf/carbon.xml file, you can also specify the port offset value. This is ONLY applicable if you have multiple WSO2 products hosted on the same server.
+* In the $PRODUCT_HOME/conf/carbon.xml file, you can also specify the port offset value. This is ONLY applicable if you have multiple WSO2 products hosted on the same server.
 
  Click here for more information on configuring the port offset.
  ```xml
@@ -332,7 +331,7 @@ See Setting up the Database for information on how to set up the databases for a
 ```
 <IP-of-MYSQL-DB-SERVER>   carbondb.mysql-wso2.com
 ```
-* Create the second worker node by getting a copy of the WSO2 product you just configured as a worker node and change the following in the <PRODUCT_HOME>/conf/axis2/axis2.xml file. This copy of the WSO2 product can be moved to a server of its own.
+* Create the second worker node by getting a copy of the WSO2 product you just configured as a worker node and change the following in the $PRODUCT_HOME/conf/axis2/axis2.xml file. This copy of the WSO2 product can be moved to a server of its own.
 ```xml
 <parameter name="localMemberPort">4300</parameter>
 ```
@@ -342,13 +341,13 @@ See Setting up the Database for information on how to set up the databases for a
 * Restart the configured load balancer.
 * Start the manager node. The additional `-Dsetup` argument creates the required tables in the database.
 ```
-sh <PRODUCT_HOME>/bin/wso2server.sh -Dsetup
+sh $PRODUCT_HOME/bin/wso2server.sh -Dsetup
 ```
 * Start the two worker nodes. The additional -DworkerNode=true argument indicates that this is a worker node. This parameter basically makes a server read-only. A node with this parameter will not be able to do any changes such as writing or making modifications to the deployment repository etc. This parameter also enables the worker profile, where the UI bundles will not be activated and only the back end bundles will be activated once the server starts up. When you configure the axis2.xml file, the cluster sub domain must indicate that this node belongs to the "worker" sub domain in the cluster.
 
 > Tip: It is recommendation is to delete the <PRODUCT_HOME>/repository/deployment/server directory and create an empty server directory in the worker node. This is done to avoid any SVN conflicts that may arise.
 ```
-sh <PRODUCT_HOME>/bin/wso2server.sh -DworkerNode=true
+sh $PRODUCT_HOME/bin/wso2server.sh -DworkerNode=true
 ```
 * Check for ‘member joined’ log messages in all consoles.
 
