@@ -12,7 +12,7 @@ REGISTRY_LOCAL1	Local registry space in the manager node
 REGISTRY_LOCAL2	Local registry space in the worker node
 
 The following diagram illustrates how these databases are connected to the manager and worker nodes.
-
+![Alt text](http://ziben.com.br/coisitas/images/db-cluster-esb.png)
 
 ### The following topics will guide you through all the configurations necessary to set up databases for clustering. 
 
